@@ -38,7 +38,7 @@ def team_name_data():
     return {
         'chars': ''.join(character(e) for e in emoji),
         'shortcodes': ' '.join(shortcode(e) for e in emoji),
-        'names': ' '.join(e['name'] for e in emoji),
+        'names': ' '.join(e.get('name', '???') for e in emoji),
     }
 
 
