@@ -27,9 +27,7 @@ def _emoji():
 
 def _weight(emoji_datum):
     if emoji_datum['short_name'].startswith('flag'):
-        return 0.1
-    if emoji_datum['short_name'].startswith('keycap'):
-        return 0.1
+        return 0.1  # there are ~200
     if emoji_datum.get('name', '').startswith('SQUARED CJK UNIFIED IDEOGRAPH'):
         return 0
     if emoji_datum['short_name'].startswith('skin-tone'):
