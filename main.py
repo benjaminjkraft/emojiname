@@ -33,12 +33,16 @@ def shortcode(emoji_datum):
     return ':%s:' % random.choice(emoji_datum['short_names'])
 
 
+def name(emoji_datum):
+    return (emoji_datum.get('name') or shortcode(emoji_datum)).upper()
+
+
 def team_name_data():
     emoji = random.sample(_emoji(), 3)
     return {
-        'chars': ''.join(character(e) for e in emoji),
+        'characters': ''.join(character(e) for e in emoji),
         'shortcodes': ' '.join(shortcode(e) for e in emoji),
-        'names': ' '.join(e.get('name', '???') for e in emoji),
+        'names': ' '.join(name(e) for e in emoji),
     }
 
 
@@ -46,7 +50,7 @@ def team_name_data():
 def slash():
     return flask.jsonify({
         'response_type': 'in_channel',
-        'text': (u'Our team name is %(chars)s '
+        'text': (u'Our team name is %(characters)s '
                  'which you can type like so: `%(shortcodes)s` '
                  'or pronounce like so: %(names)s.'
                  % team_name_data()),
