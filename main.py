@@ -34,7 +34,9 @@ def shortcode(emoji_datum):
 
 
 def name(emoji_datum):
-    return (emoji_datum.get('name') or shortcode(emoji_datum)).upper()
+    return (emoji_datum.get('name') or
+            emoji_datum.get('short_name').replace('_', ' ').replace('-', ' ')
+            ).upper()
 
 
 def team_name_data():
