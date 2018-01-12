@@ -40,6 +40,7 @@ def name(emoji_datum):
 
 
 def team_name_data():
+    # TODO(benkraft): Do something interestingly weighted
     emoji = random.sample(_emoji(), 3)
     return {
         'characters': ''.join(character(e) for e in emoji),
