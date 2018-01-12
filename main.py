@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import random
 import sys
@@ -24,6 +25,41 @@ def _emoji():
     return _EMOJI
 
 
+def _weight(emoji_datum):
+    if emoji_datum['short_name'].startswith('flag'):
+        return 0.1
+    if emoji_datum['short_name'].startswith('keycap'):
+        return 0.1
+    if emoji_datum['short_name'].startswith('skin-tone'):
+        return 0
+    return 1
+
+
+def _random_emoji(n):
+    exclude = set()
+    # TODO: something clever with emojitracker data
+    emoji = [(e, _weight(e)) for e in _emoji()]
+    for _ in xrange(n):
+        total = sum(w for e, w in emoji if e['unified'] not in exclude)
+        r = random.random() * total
+        for e, w in emoji:
+            if e['unified'] in exclude:
+                continue
+            elif r < w:
+                yield e
+                exclude.add(e['unified'])
+                break
+            else:
+                r -= w
+        else:
+            logging.error('Got to end of emoji list! r = %s' % r)
+            yield emoji[-1]
+
+
+def random_emoji(n=3):
+    return list(_random_emoji(n))
+
+
 def character(emoji_datum):
     return ''.join(unichr(int(c, 16))
                    for c in emoji_datum['unified'].split('-'))
@@ -40,8 +76,7 @@ def name(emoji_datum):
 
 
 def team_name_data():
-    # TODO(benkraft): Do something interestingly weighted
-    emoji = random.sample(_emoji(), 3)
+    emoji = random_emoji()
     return {
         'characters': ''.join(character(e) for e in emoji),
         'shortcodes': ' '.join(shortcode(e) for e in emoji),
