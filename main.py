@@ -86,10 +86,17 @@ def team_name_data():
 
 @app.route('/slash', methods=['POST'])
 def slash():
-    return flask.jsonify({
-        'response_type': 'in_channel',
-        'text': (u'Our team name is %(characters)s '
-                 'which you can type like so: `%(shortcodes)s` '
-                 'or pronounce like so: %(names)s.'
-                 % team_name_data()),
-    })
+    try:
+        return flask.jsonify({
+            'response_type': 'in_channel',
+            'text': (u'Our team name is %(characters)s '
+                     'which you can type like so: `%(shortcodes)s` '
+                     'or pronounce like so: %(names)s.'
+                     % team_name_data()),
+        })
+    except BaseException as e:
+        logging.exception(e)
+        return flask.jsonify({
+            'text': ('Encountered an error: "%s"!  '
+                     'Shout at <@U6NAZU6D7> for help.' % e),
+        })
