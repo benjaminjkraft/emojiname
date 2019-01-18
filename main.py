@@ -34,6 +34,10 @@ def _weight(emoji_datum):
         return 0
     if emoji_datum['short_name'].startswith('skin-tone'):
         return 0
+    if 'LATIN' in (emoji_datum['name'] or '').split():
+        return 0.25
+    if 'KEYCAP' in (emoji_datum['name'] or '').split():
+        return 0.25
     return 1
 
 
